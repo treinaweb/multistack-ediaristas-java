@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html th:replace="~{adminlte3 :: layout (~{::title}, ~{::main}, _, _)}">
+<head>
+  <title>Lista de Serviços</title>
+</head>
+<body>
+  <main>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Lista de Serviços</div>
+            <div class="card-tools">
+              <a th:href="@{/admin/servicos/cadastrar}" class="btn btn-sm btn-success">Novo Serviço</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nome</th>
+                  <th>Valor Mínimo</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="servico : ${servicos}">
+                  <td th:text="${servico.id}"></td>
+                  <td th:text="${servico.nome}"></td>
+                  <td th:text="${servico.valorMinimo}"></td>
+                  <td>
+                    <a 
+                      class="btn btn-sm btn-warning"
+                      th:href="@{/admin/servicos/{id}/editar (id=${servico.id})}"
+                    >
+                      Editar
+                    </a>
+                    <a 
+                      class="btn btn-sm btn-danger"
+                      th:href="@{/admin/servicos/{id}/excluir (id=${servico.id})}"
+                      onclick="return confirm('Tem certeja que deseja excluir este serviço?')"
+                    >
+                      Excluir
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
