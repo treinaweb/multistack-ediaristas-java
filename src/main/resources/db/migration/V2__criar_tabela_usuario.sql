@@ -5,5 +5,5 @@ CREATE TABLE `usuario` (
   `senha` varchar(255) NOT NULL,
   `tipo_usuario` varchar(8) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_5171l57faosmj8myawaucatdw` (`email`)
+  UNIQUE KEY (`email`)
 );
