@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll();
 
         http.logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"));
+            .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
+            .logoutSuccessUrl("/admin/login");
 
         http.rememberMe()
             .rememberMeParameter("lembrar-me")

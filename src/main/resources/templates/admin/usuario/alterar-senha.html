@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html th:replace="~{adminlte3 :: layout (~{::title}, ~{::main}, _, _)}">
+<head>
+  <title>Atualização de Senha</title>
+</head>
+<body>
+  <main>
+    <div class="row">
+      <div class="col">
+        <div class="card card-primary">
+          <div class="card-header">
+            <div class="card-title">Atualização de Senha</div>
+          </div>
+          <div class="card-body">
+
+            <form method="POST" th:object="${alterarSenhaForm}">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="senhaAntiga">Senha antiga</label>
+                    <input type="password" class="form-control" th:field="*{senhaAntiga}">
+                    <ul>
+                      <li class="text-danger" th:each="erro : ${#fields.errors('senhaAntiga')}" th:text="${erro}"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" th:field="*{senha}">
+                    <ul>
+                      <li class="text-danger" th:each="erro : ${#fields.errors('senha')}" th:text="${erro}"></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label for="confirmacaoSenha">Confirmação de senha</label>
+                    <input type="password" class="form-control" th:field="*{confirmacaoSenha}">
+                    <ul>
+                      <li class="text-danger" th:each="erro : ${#fields.errors('confirmacaoSenha')}" th:text="${erro}"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success">Salvar</button>
+
+            </form>
+          </div>  
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
