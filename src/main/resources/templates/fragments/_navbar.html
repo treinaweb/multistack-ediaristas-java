@@ -20,7 +20,7 @@
             <img src="https://placekitten.com/200/200" alt="User Avatar" class="img-size-50 mr-3 img-circle">
             <div class="media-body">
               <h3 class="dropdown-item-title">
-                <span>user@mail.com</span>
+                <span sec:authentication="name">user@mail.com</span>
                 <span class="float-right text-sm text-danger"><i class="fas fa-online"></i></span>
               </h3>
               <p class="text-sm"><small>Membro desde</small></p>
@@ -31,8 +31,8 @@
         </a>
         <div class="dropdown-divider"></div>
         <div class="dropdown-footer">
-          <a href="#" class="btn btn-primary btn-sm">Mudar senha</a>
-          <a href="#" class="btn btn-danger btn-sm">Sair</a>
+          <a th:href="@{/admin/usuarios/alterar-senha}" class="btn btn-primary btn-sm">Mudar senha</a>
+          <a th:href="@{/admin/logout}" class="btn btn-danger btn-sm">Sair</a>
         </div>
       </div>
     </li>
