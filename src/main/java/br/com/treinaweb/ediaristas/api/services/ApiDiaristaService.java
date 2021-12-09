@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiaristaLocalidadeResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiDiaristaMapper;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
+import br.com.treinaweb.ediaristas.core.services.consultaendereco.adapters.EnderecoService;
 
 @Service
 public class ApiDiaristaService {
@@ -18,8 +19,13 @@ public class ApiDiaristaService {
     @Autowired
     private ApiDiaristaMapper mapper;
 
-    public List<DiaristaLocalidadeResponse> buscarDiaristasPorCep() {
-        return repository.findAll()
+    @Autowired
+    private EnderecoService enderecoService;
+
+    public List<DiaristaLocalidadeResponse> buscarDiaristasPorCep(String cep) {
+        var codigoIbge = enderecoService.buscarEnderecoPorCep(cep).getIbge();
+
+        return repository.findByCidadesAtendidasCodigoIbge(codigoIbge)
             .stream()
             .map(mapper::toDiaristaLocalidadeResponse)
             .toList();
