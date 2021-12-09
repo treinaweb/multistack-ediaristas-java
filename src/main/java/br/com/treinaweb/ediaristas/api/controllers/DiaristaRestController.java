@@ -17,7 +17,7 @@ public class DiaristaRestController {
     private ApiDiaristaService service;
 
     @GetMapping("/localidades")
-    public DiaristaLocalidadesPagedResponse buscarDiaristasPorCep(@RequestParam String cep) {
+    public DiaristaLocalidadesPagedResponse buscarDiaristasPorCep(@RequestParam(required = false) String cep) {
         return service.buscarDiaristasPorCep(cep);
     }
 
