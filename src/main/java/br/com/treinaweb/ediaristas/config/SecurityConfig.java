@@ -39,10 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+            .antMatchers("/api/**").permitAll()
             .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.toString())
             .anyRequest().authenticated();
 
-        http.formLogin()    
+        http.formLogin()
             .loginPage("/admin/login")
             .usernameParameter("email")
             .passwordParameter("senha")
@@ -57,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .rememberMeParameter("lembrar-me")
             .tokenValiditySeconds(rememberMeValiditySeconds)
             .key(rememberMeKey);
+
+        http.cors();
     }
 
     @Override
@@ -65,5 +68,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/webjars/**")
             .antMatchers("/img/**");
     }
-    
+
 }

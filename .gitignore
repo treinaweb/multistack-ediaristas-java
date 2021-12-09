@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### PlantUML ###
+uml/
+
+### Docker ###
+docker-compose.yml
