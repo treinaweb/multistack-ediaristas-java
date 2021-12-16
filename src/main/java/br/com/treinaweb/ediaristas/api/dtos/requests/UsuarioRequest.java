@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import br.com.treinaweb.ediaristas.core.validators.Idade;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,7 @@ public class UsuarioRequest {
 
     @NotNull
     @Past
+    @Idade(min = 18, max = 100)
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate nascimento;
 
