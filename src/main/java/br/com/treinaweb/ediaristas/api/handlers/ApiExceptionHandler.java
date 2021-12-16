@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.treinaweb.ediaristas.api.dtos.responses.ErrorResponse;
+import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -39,6 +40,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .build();
 
         return ResponseEntity.badRequest().body(errorReponse);
+    }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<Object> handleValidacaoException(ValidacaoException exception) {
+        var body = new HashMap<String, List<String>>();
+
+        var fieldError = exception.getFieldError();
+        var fieldErrors = new ArrayList<String>();
+
+        fieldErrors.add(fieldError.getDefaultMessage());
+        var field = camelCaseToSnakeCase.translate(fieldError.getField());
+        body.put(field, fieldErrors);
+
+        return ResponseEntity.badRequest().body(body);
     }
 
     @Override
