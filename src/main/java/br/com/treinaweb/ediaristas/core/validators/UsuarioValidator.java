@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 
 import br.com.treinaweb.ediaristas.core.exceptions.UsuarioJaCadastradoException;
+import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
 
@@ -52,7 +53,7 @@ public class UsuarioValidator {
             var mensagem = "Usuário do tipo DIARISTA precisa ter a chave pix";
             var fieldError = new FieldError(usuario.getClass().getName(), "chavePix", usuario.getChavePix(), false, null, null, mensagem);
 
-            throw new UsuarioJaCadastradoException(mensagem, fieldError);
+            throw new ValidacaoException(mensagem, fieldError);
         }
     }
 
