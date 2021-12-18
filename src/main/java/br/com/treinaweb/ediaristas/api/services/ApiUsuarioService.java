@@ -44,9 +44,22 @@ public class ApiUsuarioService {
         var fotoDocumento = storageService.salvar(request.getFotoDocumento());
         usuarioParaCadastrar.setFotoDocumento(fotoDocumento);
 
+        if (usuarioParaCadastrar.isDiarista()) {
+            var reputacaoMedia = calcularMediaReputacaoDiaristas();
+            usuarioParaCadastrar.setReputacao(reputacaoMedia);
+        }
+
         var usuarioCadastrado = repository.save(usuarioParaCadastrar);
 
         return mapper.toResponse(usuarioCadastrado);
+    }
+
+    private Double calcularMediaReputacaoDiaristas() {
+        var reputacaoMedia = repository.getMediaReputacaoDiarista();
+        if (reputacaoMedia == null || reputacaoMedia == 0.0) {
+            reputacaoMedia = 5.0;
+        }
+        return reputacaoMedia;
     }
 
     private void validarConfirmacaoSenha(UsuarioRequest request) {
