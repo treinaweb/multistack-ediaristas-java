@@ -37,3 +37,6 @@ uml/
 
 ### Docker ###
 docker-compose.yml
+
+### Media ###
+uploads/
