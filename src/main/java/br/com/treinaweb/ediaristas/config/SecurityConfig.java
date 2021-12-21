@@ -2,7 +2,9 @@ package br.com.treinaweb.ediaristas.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -30,6 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${br.com.treinaweb.ediaristas.rememberMe.validitySeconds}")
     private int rememberMeValiditySeconds;
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
@@ -41,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers("/uploads").permitAll()
             .antMatchers("/api/**").permitAll()
+            .antMatchers("/auth/**").permitAll()
             .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.toString())
             .anyRequest().authenticated();
 
@@ -61,7 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .key(rememberMeKey);
 
         http.cors();
-        http.csrf().ignoringAntMatchers("/api/**");
+        http.csrf()
+            .ignoringAntMatchers("/api/**")
+            .ignoringAntMatchers("/auth/**");
     }
 
     @Override
