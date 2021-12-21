@@ -4,21 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
 
-@Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -26,60 +27,101 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Value("${br.com.treinaweb.ediaristas.rememberMe.key}")
-    private String rememberMeKey;
+    @Order(1)
+    @Configuration
+    public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
+        }
 
-    @Value("${br.com.treinaweb.ediaristas.rememberMe.validitySeconds}")
-    private int rememberMeValiditySeconds;
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.requestMatchers(requestMatcherCustomizer ->
+                requestMatcherCustomizer
+                    .antMatchers("/api/**", "/auth/**")
+            )
+            .authorizeRequests(authorizeRequestsCustomizer ->
+                authorizeRequestsCustomizer
+                    .anyRequest()
+                    .permitAll()
+            )
+            .csrf(csrfCustomizer ->
+                csrfCustomizer
+                    .disable()
+            )
+            .sessionManagement(sessionManagementCustomizer ->
+                sessionManagementCustomizer
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .cors();
+        }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
+        }
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder);
-    }
+    @Order(2)
+    @Configuration
+    public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/uploads").permitAll()
-            .antMatchers("/api/**").permitAll()
-            .antMatchers("/auth/**").permitAll()
-            .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.toString())
-            .anyRequest().authenticated();
+        @Value("${br.com.treinaweb.ediaristas.rememberMe.key}")
+        private String rememberMeKey;
 
-        http.formLogin()
-            .loginPage("/admin/login")
-            .usernameParameter("email")
-            .passwordParameter("senha")
-            .defaultSuccessUrl("/admin/servicos")
-            .permitAll();
+        @Value("${br.com.treinaweb.ediaristas.rememberMe.validitySeconds}")
+        private int rememberMeValiditySeconds;
 
-        http.logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
-            .logoutSuccessUrl("/admin/login");
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
+        }
 
-        http.rememberMe()
-            .rememberMeParameter("lembrar-me")
-            .tokenValiditySeconds(rememberMeValiditySeconds)
-            .key(rememberMeKey);
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.requestMatchers(requestMatcherCustomizer ->
+                requestMatcherCustomizer
+                    .antMatchers("/admin/**")
+            )
+            .authorizeRequests(authorizeRequestsCustomizer ->
+                authorizeRequestsCustomizer
+                    .anyRequest()
+                    .hasAnyAuthority(TipoUsuario.ADMIN.name())
+            )
+            .formLogin(formLoginCustomizer ->
+                formLoginCustomizer
+                    .loginPage("/admin/login")
+                    .usernameParameter("email")
+                    .passwordParameter("senha")
+                    .defaultSuccessUrl("/admin/servicos")
+                    .permitAll()
+            )
+            .logout(logoutCustomizer ->
+                logoutCustomizer
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
+                    .logoutSuccessUrl("/admin/login")
+            )
+            .rememberMe(rememberMeCustomizer ->
+                rememberMeCustomizer
+                    .rememberMeParameter("lembrar-me")
+                    .tokenValiditySeconds(rememberMeValiditySeconds)
+                    .key(rememberMeKey)
+            )
+            .exceptionHandling(exceptionHandlingCustomizer ->
+                exceptionHandlingCustomizer
+                    .accessDeniedPage("/admin/login"));
+        }
 
-        http.cors();
-        http.csrf()
-            .ignoringAntMatchers("/api/**")
-            .ignoringAntMatchers("/auth/**");
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-            .antMatchers("/webjars/**")
-            .antMatchers("/img/**");
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring()
+                .antMatchers("/webjars/**")
+                .antMatchers("/img/**");
+        }
     }
 
 }
