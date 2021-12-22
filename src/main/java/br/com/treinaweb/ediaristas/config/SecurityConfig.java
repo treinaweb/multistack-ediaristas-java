@@ -14,9 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
+import br.com.treinaweb.ediaristas.core.filters.AccessTokenRequestFilter;
 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -30,6 +32,10 @@ public class SecurityConfig {
     @Order(1)
     @Configuration
     public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private AccessTokenRequestFilter accessTokenRequestFilter;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(userDetailsService)
@@ -55,6 +61,7 @@ public class SecurityConfig {
                 sessionManagementCustomizer
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .addFilterBefore(accessTokenRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .cors();
         }
 
