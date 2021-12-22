@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import br.com.treinaweb.ediaristas.api.dtos.responses.ErrorResponse;
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
+import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceException;
 
 @RestControllerAdvice(annotations = RestController.class)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -54,6 +55,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         body.put(field, fieldErrors);
 
         return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(TokenServiceException.class)
+    public ResponseEntity<Object> handleTokenServiceException(
+        TokenServiceException exception, HttpServletRequest request
+    ) {
+        var status = HttpStatus.UNAUTHORIZED;
+        var errorResponse = ErrorResponse.builder()
+            .status(status.value())
+            .timestamp(LocalDateTime.now())
+            .mensagem(exception.getLocalizedMessage())
+            .path(request.getRequestURI())
+            .build();
+
+        return new ResponseEntity<Object>(errorResponse, status);
     }
 
     @Override

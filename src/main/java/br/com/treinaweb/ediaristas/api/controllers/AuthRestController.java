@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.treinaweb.ediaristas.api.dtos.requests.RefrehRequest;
 import br.com.treinaweb.ediaristas.api.dtos.requests.TokenRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.TokenResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiAuthService;
@@ -22,6 +23,11 @@ public class AuthRestController {
     @PostMapping("/token")
     public TokenResponse autenticar(@RequestBody @Valid TokenRequest tokenRequest) {
         return service.autenticar(tokenRequest);
+    }
+
+    @PostMapping("/refresh")
+    public TokenResponse reautenticar(@RequestBody @Valid RefrehRequest refrehRequest) {
+        return service.reautenticar(refrehRequest);
     }
 
 }
