@@ -3,6 +3,8 @@ package br.com.treinaweb.ediaristas.api.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,12 @@ public class AuthRestController {
     @PostMapping("/refresh")
     public TokenResponse reautenticar(@RequestBody @Valid RefrehRequest refrehRequest) {
         return service.reautenticar(refrehRequest);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody @Valid RefrehRequest refrehRequest) {
+        service.logout(refrehRequest);
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
 
 }
