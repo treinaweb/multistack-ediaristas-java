@@ -40,3 +40,5 @@ docker-compose.yml
 
 ### Media ###
 uploads/
+
+application-dev.properties
