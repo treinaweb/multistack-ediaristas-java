@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 
 import br.com.treinaweb.ediaristas.api.dtos.requests.UsuarioRequest;
+import br.com.treinaweb.ediaristas.api.dtos.responses.TokenResponse;
+import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioCadastroResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiUsuarioMapper;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.treinaweb.ediaristas.core.publishers.NovoUsuarioPublisher;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
 import br.com.treinaweb.ediaristas.core.services.storage.adapters.StorageService;
+import br.com.treinaweb.ediaristas.core.services.token.adapters.TokenService;
 import br.com.treinaweb.ediaristas.core.validators.UsuarioValidator;
 
 @Service
@@ -35,6 +38,9 @@ public class ApiUsuarioService {
     @Autowired
     private NovoUsuarioPublisher novoUsuarioPublisher;
 
+    @Autowired
+    private TokenService tokenService;
+
     public UsuarioResponse cadastrar(UsuarioRequest request) {
         validarConfirmacaoSenha(request);
 
@@ -56,7 +62,17 @@ public class ApiUsuarioService {
         var usuarioCadastrado = repository.save(usuarioParaCadastrar);
         novoUsuarioPublisher.publish(usuarioCadastrado);
 
-        return mapper.toResponse(usuarioCadastrado);
+        var response = mapper.toCadastroResponse(usuarioCadastrado);
+        var tokenResponse = gerarTokenResponse(response);
+        response.setToken(tokenResponse);
+        return response;
+    }
+
+    private TokenResponse gerarTokenResponse(UsuarioCadastroResponse response) {
+        var token = tokenService.gerarAccessToken(response.getEmail());
+        var refresh = tokenService.gerarRefreshToken(response.getEmail());
+        var tokenResponse = new TokenResponse(token, refresh);
+        return tokenResponse;
     }
 
     private Double calcularMediaReputacaoDiaristas() {
