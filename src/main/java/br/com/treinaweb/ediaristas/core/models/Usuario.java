@@ -81,4 +81,12 @@ public class Usuario {
     )
     private List<CidadeAtendida> cidadesAtendidas;
 
+    public Boolean isDiarista() {
+        return tipoUsuario.equals(TipoUsuario.DIARISTA);
+    }
+
+    public Boolean isCliente() {
+        return tipoUsuario.equals(TipoUsuario.CLIENTE);
+    }
+
 }

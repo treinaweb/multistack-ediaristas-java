@@ -1,0 +1,29 @@
+# Datasource
+spring.datasource.url=<url jdbc de conexão com o banco de dados>
+spring.datasource.username=<username do banco de dados>
+spring.datasource.password=<senha do banco de dados>
+
+# Hibernate e JPA
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+
+# Thymeleaf
+spring.thymeleaf.cache=false
+
+# Remember Me
+br.com.treinaweb.ediaristas.rememberMe.key=<chave para gerar os tokens de remember me>
+br.com.treinaweb.ediaristas.rememberMe.validitySeconds=<tempo de duração do token de remember me em segundos>
+
+# Tokens
+br.com.treinaweb.ediaristas.access.key=<chave de geração do access token>
+br.com.treinaweb.ediaristas.access.expiration=<tempo de duração do access token em segundos>
+br.com.treinaweb.ediaristas.refresh.key=<chave de geração do refresh token>
+br.com.treinaweb.ediaristas.refresh.expiration=<tempo de duração do refresh token em segundos>
+
+# Email
+spring.mail.host=<host do servidor SMTP>
+spring.mail.port=<porta do servidor SMTP>
+spring.mail.username=<username do servidor SMTP>
+spring.mail.password=<senha do servidor SMTP>
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true

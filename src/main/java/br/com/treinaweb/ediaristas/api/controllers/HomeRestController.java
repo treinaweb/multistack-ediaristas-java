@@ -30,13 +30,33 @@ public class HomeRestController {
             .withRel("verificar_disponibilidade_atendimento")
             .expand()
             .withType("GET");
+        var cadastrarUsuarioLink = linkTo(methodOn(UsuarioRestController.class).cadastrar(null))
+            .withRel("cadastrar_usuario")
+            .withType("POST");
+        var loginLink = linkTo(methodOn(AuthRestController.class).autenticar(null))
+            .withRel("login")
+            .withType("POST");
+        var refreshLink = linkTo(methodOn(AuthRestController.class).reautenticar(null))
+            .withRel("refresh")
+            .withType("POST");
+        var logoutLink = linkTo(methodOn(AuthRestController.class).logout(null))
+            .withRel("logout")
+            .withType("POST");
+        var usuarioLogadoLink = linkTo(methodOn(MeRestController.class).me())
+            .withRel("usuario_logado")
+            .withType("GET");
 
         var response = new HateoasResponse();
         response.adcionarLinks(
             listarServicosLink,
             enderecoCepLink,
             diaristasLocalidadesLink,
-            verificarDisponibilidadeAtendimentoLink
+            verificarDisponibilidadeAtendimentoLink,
+            cadastrarUsuarioLink,
+            loginLink,
+            refreshLink,
+            logoutLink,
+            usuarioLogadoLink
         );
         return response;
     }

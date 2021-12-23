@@ -10,10 +10,10 @@ import org.springframework.validation.FieldError;
 import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhaIncorretaException;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
-import br.com.treinaweb.ediaristas.core.exceptions.UsuarioJaCadastradoException;
 import br.com.treinaweb.ediaristas.core.exceptions.UsuarioNaoEncontradoException;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
+import br.com.treinaweb.ediaristas.core.validators.UsuarioValidator;
 import br.com.treinaweb.ediaristas.web.dtos.AlterarSenhaForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioCadastroForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioEdicaoForm;
@@ -32,6 +32,9 @@ public class WebUsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UsuarioValidator validator;
+
     public List<Usuario> buscarTodos() {
         return repository.findAll();
     }
@@ -46,7 +49,7 @@ public class WebUsuarioService {
         model.setSenha(senhaHash);
         model.setTipoUsuario(TipoUsuario.ADMIN);
 
-        validarCamposUnicos(model);
+        validator.validar(model);
 
         return repository.save(model);
     }
@@ -79,7 +82,7 @@ public class WebUsuarioService {
         model.setSenha(usuario.getSenha());
         model.setTipoUsuario(usuario.getTipoUsuario());
 
-        validarCamposUnicos(model);
+        validator.validar(model);
 
         return repository.save(model);
     }
@@ -92,9 +95,9 @@ public class WebUsuarioService {
 
     public void alterarSenha(AlterarSenhaForm form, String email) {
         var usuario = buscarPorEmail(email);
-        
+
         validarConfirmacaoSenha(form);
-        
+
         var senhaAtual = usuario.getSenha();
         var senhaAntiga = form.getSenhaAntiga();
         var senha = form.getSenha();
@@ -123,13 +126,4 @@ public class WebUsuarioService {
         }
     }
 
-    private void validarCamposUnicos(Usuario usuario) {
-        if (repository.isEmailJaCadastrado(usuario.getEmail(), usuario.getId())) {
-            var mensagem = "Já existe um usuário cadastrado com esse e-mail";
-            var fieldError = new FieldError(usuario.getClass().getName(), "email", usuario.getEmail(), false, null, null, mensagem);
-    
-            throw new UsuarioJaCadastradoException(mensagem, fieldError);
-        }
-    }
-    
 }
