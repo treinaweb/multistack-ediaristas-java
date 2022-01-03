@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.api.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.treinaweb.ediaristas.api.dtos.requests.DiariaRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
@@ -10,9 +11,10 @@ import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.models.Servico;
 import br.com.treinaweb.ediaristas.core.repositories.ServicoRepository;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ApiClienteMapper.class)
 public abstract class ApiDiariaMapper {
 
+    @Autowired
     protected ServicoRepository servicoRepository;
 
     public static final ApiDiariaMapper INSTANCE = Mappers.getMapper(ApiDiariaMapper.class);
