@@ -25,6 +25,34 @@ public class DiariaValidator {
 
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarTempoAtendimento(diaria);
+    }
+
+    private void validarTempoAtendimento(Diaria diaria) {
+        var tempoAtendimento = diaria.getTempoAtendimento();
+        var tempoTotal = calcularTempoTotal(diaria);
+
+        if (tempoAtendimento != tempoTotal) {
+            var mensagem = "valores não correspondem";
+            var fieldError = new FieldError(diaria.getClass().getName(), "tempoAtendimento", diaria.getTempoAtendimento(), false, null, null, mensagem);
+
+            throw new ValidacaoException(mensagem, fieldError);
+        }
+    }
+
+    private Integer calcularTempoTotal(Diaria diaria) {
+        var servico = diaria.getServico();
+
+        Integer tempoTotal = 0;
+        tempoTotal += diaria.getQuantidadeQuartos() * servico.getHorasQuarto();
+        tempoTotal += diaria.getQuantidadeSalas() * servico.getHorasSala();
+        tempoTotal += diaria.getQuantidadeCozinhas() * servico.getHorasCozinha();
+        tempoTotal += diaria.getQuantidadeBanheiros() * servico.getHorasBanheiro();
+        tempoTotal += diaria.getQuantidadeQuintais() * servico.getHorasQuintal();
+        tempoTotal += diaria.getQuantidadeOutros() * servico.getHorasQuarto();
+
+        return tempoTotal;
     }
 
 }
