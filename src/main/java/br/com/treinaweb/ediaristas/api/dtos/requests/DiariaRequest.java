@@ -69,6 +69,11 @@ public class DiariaRequest {
     private String cep;
 
     @NotNull
+    @NotEmpty
+    @Size(max = 255)
+    private String codigoIbge;
+
+    @NotNull
     @PositiveOrZero
     private Integer quantidadeQuartos;
 
