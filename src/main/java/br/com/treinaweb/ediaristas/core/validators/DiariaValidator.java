@@ -1,5 +1,7 @@
 package br.com.treinaweb.ediaristas.core.validators;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 
@@ -39,6 +41,47 @@ public class DiariaValidator {
 
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarPreco(diaria);
+    }
+
+    private void validarPreco(Diaria diaria) {
+        var preco = diaria.getPreco();
+        var valorTotal = calcularValorTotal(diaria);
+
+        if (preco.compareTo(valorTotal) != 0) {
+            var mensagem = "valores não correspondem";
+            var fieldError = new FieldError(diaria.getClass().getName(), "preco", diaria.getPreco(), false, null, null, mensagem);
+
+            throw new ValidacaoException(mensagem, fieldError);
+        }
+    }
+
+    private BigDecimal calcularValorTotal(Diaria diaria) {
+        var servico = diaria.getServico();
+        var valorMinimo = servico.getValorMinimo();
+
+        var valorQuarto = calcularValorDoComodo(servico.getValorQuarto(), diaria.getQuantidadeQuartos());
+        var valorSala = calcularValorDoComodo(servico.getValorSala(), diaria.getQuantidadeSalas());
+        var valorCozinha = calcularValorDoComodo(servico.getValorCozinha(), diaria.getQuantidadeCozinhas());
+        var valorBanheiro = calcularValorDoComodo(servico.getValorBanheiro(), diaria.getQuantidadeBanheiros());
+        var valorQuintal = calcularValorDoComodo(servico.getValorQuintal(), diaria.getQuantidadeQuintais());
+        var valorOutros = calcularValorDoComodo(servico.getValorOutros(), diaria.getQuantidadeOutros());
+
+        var valorTotal = valorQuarto.add(valorSala)
+            .add(valorBanheiro)
+            .add(valorCozinha)
+            .add(valorQuintal)
+            .add(valorOutros);
+
+        if (valorTotal.compareTo(valorMinimo) < 0) {
+            return valorMinimo;
+        }
+        return valorTotal;
+    }
+
+    private BigDecimal calcularValorDoComodo(BigDecimal valorComodo, Integer quantidadeDeComodos) {
+        return valorComodo.multiply(new BigDecimal(quantidadeDeComodos));
     }
 
     private Integer calcularTempoTotal(Diaria diaria) {
