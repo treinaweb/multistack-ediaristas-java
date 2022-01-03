@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import br.com.treinaweb.ediaristas.core.validators.HoraDepoisDe;
 import br.com.treinaweb.ediaristas.core.validators.ServicoExistsById;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class DiariaRequest {
 
     @NotNull
     @Future
+    @HoraDepoisDe(horaInicio = 6)
     private LocalDateTime dataAtendimento;
 
     @NotNull
