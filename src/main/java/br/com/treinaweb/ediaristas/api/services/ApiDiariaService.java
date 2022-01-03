@@ -12,6 +12,7 @@ import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
 import br.com.treinaweb.ediaristas.core.utils.SecurityUtils;
+import br.com.treinaweb.ediaristas.core.validators.DiariaValidator;
 
 @Service
 public class ApiDiariaService {
@@ -23,6 +24,9 @@ public class ApiDiariaService {
     private ApiDiariaMapper mapper;
 
     @Autowired
+    private DiariaValidator validator;
+
+    @Autowired
     private SecurityUtils securityUtils;
 
     public DiariaResponse cadastrar(DiariaRequest request) {
@@ -31,6 +35,8 @@ public class ApiDiariaService {
         model.setValorComissao(calcularComissao(model));
         model.setCliente(securityUtils.getUsuarioLogado());
         model.setStatus(DiariaStatus.SEM_PAGAMENTO);
+
+        validator.validar(model);
 
         var modelCadastrado = repository.save(model);
 
