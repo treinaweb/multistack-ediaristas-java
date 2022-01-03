@@ -2,14 +2,20 @@ package br.com.treinaweb.ediaristas.core.validators;
 
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
+import br.com.treinaweb.ediaristas.core.services.consultaendereco.adapters.EnderecoService;
+import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
 
 @Component
 public class DiariaValidator {
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     public void validar(Diaria diaria) {
         validarHoraTermino(diaria);
@@ -52,6 +58,21 @@ public class DiariaValidator {
         if (preco.compareTo(valorTotal) != 0) {
             var mensagem = "valores não correspondem";
             var fieldError = new FieldError(diaria.getClass().getName(), "preco", diaria.getPreco(), false, null, null, mensagem);
+
+            throw new ValidacaoException(mensagem, fieldError);
+        }
+
+        validarCep(diaria);
+    }
+
+    private void validarCep(Diaria diaria) {
+        var cep = diaria.getCep();
+
+        try {
+            enderecoService.buscarEnderecoPorCep(cep);
+        } catch (EnderecoServiceException exception) {
+            var mensagem = exception.getLocalizedMessage();
+            var fieldError = new FieldError(diaria.getClass().getName(), "cep", diaria.getCep(), false, null, null, mensagem);
 
             throw new ValidacaoException(mensagem, fieldError);
         }
