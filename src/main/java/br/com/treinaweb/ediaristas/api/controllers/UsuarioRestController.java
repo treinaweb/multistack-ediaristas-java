@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.treinaweb.ediaristas.api.assemblers.UsuarioAssembler;
 import br.com.treinaweb.ediaristas.api.dtos.requests.UsuarioRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiUsuarioService;
@@ -21,10 +22,17 @@ public class UsuarioRestController {
     @Autowired
     private ApiUsuarioService service;
 
+    @Autowired
+    private UsuarioAssembler assembler;
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public UsuarioResponse cadastrar(@ModelAttribute @Valid UsuarioRequest request) {
-        return service.cadastrar(request);
+        var response = service.cadastrar(request);
+
+        assembler.adicionarLinks(response);
+
+        return response;
     }
 
 }
