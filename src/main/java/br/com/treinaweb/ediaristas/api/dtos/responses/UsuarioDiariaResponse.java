@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(SnakeCaseStrategy.class)
-public class ClienteResponse {
+public class UsuarioDiariaResponse {
 
     private Long id;
 

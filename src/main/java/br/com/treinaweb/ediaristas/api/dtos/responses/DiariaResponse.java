@@ -64,6 +64,8 @@ public class DiariaResponse {
 
     private Long servico;
 
-    private ClienteResponse cliente;
+    private UsuarioDiariaResponse cliente;
+
+    private UsuarioDiariaResponse diarista;
 
 }
