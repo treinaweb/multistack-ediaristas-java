@@ -121,4 +121,8 @@ public class Diaria extends Auditable {
     )
     private List<Usuario> candidatos;
 
+    public Boolean isSemPagamento() {
+        return status.equals(DiariaStatus.SEM_PAGAMENTO);
+    }
+
 }

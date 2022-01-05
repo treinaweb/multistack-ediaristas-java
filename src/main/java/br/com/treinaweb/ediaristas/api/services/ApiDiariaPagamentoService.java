@@ -9,6 +9,7 @@ import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
+import br.com.treinaweb.ediaristas.core.validators.PagamentoValidator;
 
 @Service
 public class ApiDiariaPagamentoService {
@@ -16,8 +17,13 @@ public class ApiDiariaPagamentoService {
     @Autowired
     private DiariaRepository diariaRepository;
 
+    @Autowired
+    private PagamentoValidator validator;
+
     public MensagemResponse pagar(PagamentoRequest request, Long id) {
         var diaria = buscarDiariaPorId(id);
+
+        validator.validar(diaria);
 
         diaria.setStatus(DiariaStatus.PAGO);
         diariaRepository.save(diaria);
