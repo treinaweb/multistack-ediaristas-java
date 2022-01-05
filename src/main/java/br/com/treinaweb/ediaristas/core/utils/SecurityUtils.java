@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
 import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
 import br.com.treinaweb.ediaristas.core.exceptions.UsuarioNaoEncontradoException;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
@@ -23,6 +24,14 @@ public class SecurityUtils {
 
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    public Boolean isCliente() {
+        var authentication = getAuthentication();
+        var tipoCliente = TipoUsuario.CLIENTE.name();
+        return authentication.getAuthorities()
+            .stream()
+            .anyMatch(authority -> authority.getAuthority().equals(tipoCliente));
     }
 
     public String getEmailUsuarioLogado() {

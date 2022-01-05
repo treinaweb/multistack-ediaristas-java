@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.treinaweb.ediaristas.api.assemblers.DiariaAssembler;
 import br.com.treinaweb.ediaristas.api.dtos.requests.DiariaRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiDiariaService;
@@ -22,11 +23,18 @@ public class DiariaRestController {
     @Autowired
     private ApiDiariaService service;
 
+    @Autowired
+    private DiariaAssembler assembler;
+
     @EDiaristasPermissions.isCliente
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public DiariaResponse cadastrar(@RequestBody @Valid DiariaRequest request) {
-        return service.cadastrar(request);
+        var response = service.cadastrar(request);
+
+        assembler.adicionarLinks(response);
+
+        return response;
     }
 
 }
