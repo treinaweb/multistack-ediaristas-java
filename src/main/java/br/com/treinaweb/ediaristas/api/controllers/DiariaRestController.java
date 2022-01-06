@@ -1,9 +1,12 @@
 package br.com.treinaweb.ediaristas.api.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,16 @@ public class DiariaRestController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public DiariaResponse cadastrar(@RequestBody @Valid DiariaRequest request) {
         var response = service.cadastrar(request);
+
+        assembler.adicionarLinks(response);
+
+        return response;
+    }
+
+    @EDiaristasPermissions.isDiaristaOrCliente
+    @GetMapping
+    public List<DiariaResponse> listarPorUsuarioLogado() {
+        var response = service.listarPorUsuarioLogado();
 
         assembler.adicionarLinks(response);
 
