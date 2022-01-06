@@ -31,6 +31,9 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
     }
 
     @Override
-    public void adicionarLinks(List<DiariaResponse> collectionResource) {}
+    public void adicionarLinks(List<DiariaResponse> collectionResource) {
+        collectionResource.stream()
+            .forEach(this::adicionarLinks);
+    }
 
 }
