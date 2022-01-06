@@ -56,6 +56,16 @@ public class SecurityUtils {
         return diaria.getCliente().equals(usuarioLogado);
     }
 
+    public Boolean isClienteOrDiaristaDaDiaria(Long id) {
+        var diaria = buscarDiariaPorId(id);
+        var usuarioLogado = getUsuarioLogado();
+
+        var isClienteDaDiaria = diaria.getCliente() != null && diaria.getCliente().equals(usuarioLogado);
+        var isDiaristaDaDiaria = diaria.getDiarista() != null && diaria.getDiarista().equals(usuarioLogado);
+
+        return isClienteDaDiaria || isDiaristaDaDiaria;
+    }
+
     private Diaria buscarDiariaPorId(Long id) {
         var mensagem = String.format("Diária com id %d não encontrada", id);
         return diariaRepository.findById(id)

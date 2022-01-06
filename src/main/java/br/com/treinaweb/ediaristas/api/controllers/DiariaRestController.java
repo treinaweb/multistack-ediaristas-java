@@ -51,6 +51,7 @@ public class DiariaRestController {
         return response;
     }
 
+    @EDiaristasPermissions.isClienteOrDiaristaDaDiaria
     @GetMapping("/{id}")
     public DiariaResponse buscarPorId(@PathVariable Long id) {
         var response = service.buscarPorId(id);
