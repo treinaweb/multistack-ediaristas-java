@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.core.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -80,6 +81,10 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "cidade_atendida_id")
     )
     private List<CidadeAtendida> cidadesAtendidas;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "endereco_id", nullable = true)
+    private EnderecoDiarista endereco;
 
     public Boolean isDiarista() {
         return tipoUsuario.equals(TipoUsuario.DIARISTA);
