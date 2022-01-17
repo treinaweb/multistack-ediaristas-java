@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import br.com.treinaweb.ediaristas.api.dtos.responses.ErrorResponse;
 import br.com.treinaweb.ediaristas.core.exceptions.TokenNaBlackListException;
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
+import br.com.treinaweb.ediaristas.core.services.consultacidade.exceptions.ConsultaCidadeServiceException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
 import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceException;
 
@@ -70,6 +71,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(
         EntityNotFoundException exception, HttpServletRequest request
+    ) {
+        return criarErrorResponse(HttpStatus.NOT_FOUND, exception.getLocalizedMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(ConsultaCidadeServiceException.class)
+    public ResponseEntity<Object> handleConsultaCidadeServiceException(
+        ConsultaCidadeServiceException exception, HttpServletRequest request
     ) {
         return criarErrorResponse(HttpStatus.NOT_FOUND, exception.getLocalizedMessage(), request.getRequestURI());
     }
