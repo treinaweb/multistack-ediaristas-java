@@ -22,6 +22,12 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
 
             resource.adcionarLinks(cadastrarDiariaLink);
         }
+
+        var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())
+            .withRel("lista_diarias")
+            .withType("GET");
+
+        resource.adcionarLinks(listaDiariasLink);
     }
 
     @Override

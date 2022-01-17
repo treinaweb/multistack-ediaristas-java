@@ -19,9 +19,14 @@ public @interface EDiaristasPermissions {
     @Target(ElementType.METHOD)
     public @interface isCliente {}
 
-    @PreAuthorize("isAuthenticated and @securityUtils.isClienteDaDiaria(#id)")
+    @PreAuthorize("hasAuthority('CLIENTE') and @securityUtils.isClienteDaDiaria(#id)")
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     public @interface isClienteDaDiaria {}
+
+    @PreAuthorize("hasAnyAuthority('CLIENTE', 'DIARISTA') and @securityUtils.isClienteOrDiaristaDaDiaria(#id)")
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface isClienteOrDiaristaDaDiaria {}
 
 }
