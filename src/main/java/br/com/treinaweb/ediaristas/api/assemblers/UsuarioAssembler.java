@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
+import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
 @Component
@@ -21,6 +22,16 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
                 .withType("POST");
 
             resource.adcionarLinks(cadastrarDiariaLink);
+        } else {
+            var atualizarEnderecoLink = linkTo(methodOn(EnderecoDiaristaRestController.class).alterarEndereco(null))
+                .withRel("atualizar_endereco")
+                .withType("PUT");
+
+            var listarEnderecoLink = linkTo(methodOn(EnderecoDiaristaRestController.class).exibirEndereco())
+                .withRel("listar_endereco")
+                .withType("GET");
+
+            resource.adcionarLinks(atualizarEnderecoLink, listarEnderecoLink);
         }
 
         var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())
