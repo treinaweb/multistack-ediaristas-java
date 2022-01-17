@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EndereciDiaristaResponse {
+public class EnderecoDiaristaResponse {
 
     private Long id;
     private String logradouro;

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import br.com.treinaweb.ediaristas.api.dtos.requests.EnderecoDiaristaRequest;
-import br.com.treinaweb.ediaristas.api.dtos.responses.EndereciDiaristaResponse;
+import br.com.treinaweb.ediaristas.api.dtos.responses.EnderecoDiaristaResponse;
 import br.com.treinaweb.ediaristas.core.models.EnderecoDiarista;
 
 @Mapper(componentModel = "spring")
@@ -14,6 +14,6 @@ public interface ApiEnderecoDiaristaMapper {
 
     EnderecoDiarista toModel(EnderecoDiaristaRequest request);
 
-    EndereciDiaristaResponse toResponse(EnderecoDiarista model);
+    EnderecoDiaristaResponse toResponse(EnderecoDiarista model);
 
 }
