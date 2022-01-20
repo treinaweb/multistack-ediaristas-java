@@ -39,6 +39,18 @@ public class CandidaturaValidator {
             var fieldError = new FieldError(diaria.getClass().getName(), "candidatos", null, false, null, null, mensagem);
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarQuantidadeCandidatos(diaria);
+    }
+
+    private void validarQuantidadeCandidatos(Diaria diaria) {
+        var candidatos = diaria.getCandidatos();
+
+        if (candidatos.size() >= 3) {
+            var mensagem = "Diária já possui o número máximo de candidatos";
+            var fieldError = new FieldError(diaria.getClass().getName(), "candidatos", null, false, null, null, mensagem);
+            throw new ValidacaoException(mensagem, fieldError);
+        }
     }
 
 }
