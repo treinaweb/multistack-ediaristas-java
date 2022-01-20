@@ -125,4 +125,8 @@ public class Diaria extends Auditable {
         return status.equals(DiariaStatus.SEM_PAGAMENTO);
     }
 
+    public Boolean isPago() {
+        return status.equals(DiariaStatus.PAGO);
+    }
+
 }
