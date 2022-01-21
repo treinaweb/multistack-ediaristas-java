@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import br.com.treinaweb.ediaristas.api.controllers.CidadesAtendidasRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
+import br.com.treinaweb.ediaristas.api.controllers.OportunidadeRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
 @Component
@@ -40,7 +41,11 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
                 .withRel("cidades_atendidas")
                 .withType("GET");
 
-            resource.adcionarLinks(atualizarEnderecoLink, listarEnderecoLink, relacionarCidadesLink, cidadesAtendidasLink);
+            var listaOportunidadesLink = linkTo(methodOn(OportunidadeRestController.class).buscarOportunidades())
+                .withRel("lista_oportunidades")
+                .withType("GET");
+
+            resource.adcionarLinks(atualizarEnderecoLink, listarEnderecoLink, relacionarCidadesLink, cidadesAtendidasLink, listaOportunidadesLink);
         }
 
         var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())
