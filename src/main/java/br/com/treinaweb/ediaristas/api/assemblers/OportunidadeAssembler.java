@@ -8,13 +8,13 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import br.com.treinaweb.ediaristas.api.controllers.CandidaturaRestController;
-import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
+import br.com.treinaweb.ediaristas.api.dtos.responses.OportunidadeResponse;
 
 @Component
-public class OportunidadeAssembler implements Assembler<DiariaResponse> {
+public class OportunidadeAssembler implements Assembler<OportunidadeResponse> {
 
     @Override
-    public void adicionarLinks(DiariaResponse resource) {
+    public void adicionarLinks(OportunidadeResponse resource) {
         var id = resource.getId();
 
         var candidatarDiariaLink = linkTo(methodOn(CandidaturaRestController.class).candidatar(id))
@@ -25,7 +25,7 @@ public class OportunidadeAssembler implements Assembler<DiariaResponse> {
     }
 
     @Override
-    public void adicionarLinks(List<DiariaResponse> collectionResource) {
+    public void adicionarLinks(List<OportunidadeResponse> collectionResource) {
         collectionResource.stream()
             .forEach(this::adicionarLinks);
     }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.treinaweb.ediaristas.api.assemblers.OportunidadeAssembler;
-import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
+import br.com.treinaweb.ediaristas.api.dtos.responses.OportunidadeResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiOportunidadeService;
 import br.com.treinaweb.ediaristas.core.permissions.EDiaristasPermissions;
 
@@ -24,7 +24,7 @@ public class OportunidadeRestController {
 
     @GetMapping
     @EDiaristasPermissions.isDiarista
-    public List<DiariaResponse> buscarOportunidades() {
+    public List<OportunidadeResponse> buscarOportunidades() {
         var response = service.buscarOportunidades();
         assembler.adicionarLinks(response);
         return response;
