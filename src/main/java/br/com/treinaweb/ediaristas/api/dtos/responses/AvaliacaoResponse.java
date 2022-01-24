@@ -1,27 +1,26 @@
-package br.com.treinaweb.ediaristas.api.dtos.requests;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+package br.com.treinaweb.ediaristas.api.dtos.responses;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(SnakeCaseStrategy.class)
-public class CidadeAtendidaRequest {
+public class AvaliacaoResponse {
 
-    @NotNull
-    @NotEmpty
-    private String cidade;
+    private String descricao;
 
-    @NotNull
-    @NotEmpty
-    private String codigoIbge;
+    private Double nota;
+
+    private String nomeAvaliador;
+
+    private String fotoAvaliador;
 
 }
