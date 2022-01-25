@@ -46,13 +46,13 @@ public interface DiariaRepository extends
             where(
                 isPago()
                 .and(semDiarista())
-                .and(comNumeroCandidatosIagualA(3))
+                .and(comNumeroCandidatosIgualA(3))
             ).or(
                 isPago()
                 .and(semDiarista())
                 .and(comMais24HorasDesdeCriacao())
                 .and(comNumeroCandidatosMenorQue(3))
-                .and(comNumeroCandidatosMaiorIgualA(1))
+                .and(comNumeroCandidatosMaiorOuIgualA(1))
             )
         );
     }
