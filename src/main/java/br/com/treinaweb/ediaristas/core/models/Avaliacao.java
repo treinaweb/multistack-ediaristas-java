@@ -19,9 +19,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-public class Avaliacao {
+public class Avaliacao extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
