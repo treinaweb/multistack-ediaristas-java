@@ -10,6 +10,7 @@ import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
 import br.com.treinaweb.ediaristas.core.models.Avaliacao;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
+import br.com.treinaweb.ediaristas.core.publishers.NovaAvaliacaoPublisher;
 import br.com.treinaweb.ediaristas.core.repositories.AvaliacaoRepository;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
 import br.com.treinaweb.ediaristas.core.utils.SecurityUtils;
@@ -33,6 +34,9 @@ public class ApiAvaliacaoService {
     @Autowired
     private AvaliacaoValidator validator;
 
+    @Autowired
+    private NovaAvaliacaoPublisher novaAvaliacaoPublisher;
+
     public MensagemResponse avaliarDiaria(AvaliacaoRequest request, Long id) {
         var diaria = buscarDiariaPorId(id);
         var avaliador = securityUtils.getUsuarioLogado();
@@ -44,7 +48,8 @@ public class ApiAvaliacaoService {
 
         validator.validar(model);
 
-        repository.save(model);
+        model = repository.save(model);
+        novaAvaliacaoPublisher.publish(model);
 
         return new MensagemResponse("Avaliação realizada com sucesso!");
     }
