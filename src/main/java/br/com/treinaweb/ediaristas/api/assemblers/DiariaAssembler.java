@@ -9,10 +9,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.treinaweb.ediaristas.api.controllers.AvaliacaoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.ConfirmacaoPresencaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaPagamentoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
+import br.com.treinaweb.ediaristas.core.repositories.AvaliacaoRepository;
 import br.com.treinaweb.ediaristas.core.utils.SecurityUtils;
 
 @Component
@@ -20,6 +22,9 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
 
     @Autowired
     private SecurityUtils securityUtils;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
 
     @Override
     public void adicionarLinks(DiariaResponse resource) {
@@ -38,6 +43,13 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
                 .withType("PATCH");
 
             resource.adcionarLinks(confirmarPresencaLink);
+        }
+
+        if (isAptaParaAvaliacao(resource)) {
+            var avaliacaoLink = linkTo(methodOn(AvaliacaoRestController.class).avaliarDiaria(null, id))
+                .withRel("avaliar_diaria")
+                .withType("PATCH");
+            resource.adcionarLinks(avaliacaoLink);
         }
 
         var selfLink = linkTo(methodOn(DiariaRestController.class).buscarPorId(id))
@@ -61,6 +73,11 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
 
     private boolean isDataAtendimentoNoPassado(DiariaResponse resource) {
         return resource.getDataAtendimento().isBefore(LocalDateTime.now());
+    }
+
+    private boolean isAptaParaAvaliacao(DiariaResponse resource) {
+        return resource.isConcluido()
+            && !avaliacaoRepository.existsByAvaliadorAndDiariaId(securityUtils.getUsuarioLogado(), resource.getId());
     }
 
 }
