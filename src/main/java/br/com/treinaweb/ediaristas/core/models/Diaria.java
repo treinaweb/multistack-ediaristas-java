@@ -133,4 +133,8 @@ public class Diaria extends Auditable {
         return status.equals(DiariaStatus.CONFIRMADO);
     }
 
+    public Boolean isConcluido() {
+        return status.equals(DiariaStatus.CONCLUIDO);
+    }
+
 }
