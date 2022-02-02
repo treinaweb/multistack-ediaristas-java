@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 
 import br.com.treinaweb.ediaristas.core.enums.PagamentoStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
+@Builder
 public class Pagamento extends Auditable {
 
     @Id

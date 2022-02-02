@@ -1,5 +1,7 @@
 package br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,10 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import br.com.treinaweb.ediaristas.core.enums.PagamentoStatus;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.models.Pagamento;
+import br.com.treinaweb.ediaristas.core.repositories.PagamentoRepository;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.adpaters.GatewayPagamentoService;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.exceptions.GatewayPagamentoException;
+import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeTransacaoRequest;
+import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeTransacaoResponse;
 
 @Service
 public class PagarMeService implements GatewayPagamentoService {
@@ -24,6 +30,9 @@ public class PagarMeService implements GatewayPagamentoService {
 
     @Value("${br.com.treinaweb.ediaristas.pagarme.apiKey}")
     private String apiKey;
+
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -44,7 +53,37 @@ public class PagarMeService implements GatewayPagamentoService {
     }
 
     private Pagamento tryPagar(Diaria diaria, String cardHash) {
-        return null;
+        var transacaoRequest = criarTransacaoRequest(diaria, cardHash);
+        var url = BASE_URL + "/transactions";
+        var response = clienteHttp.postForEntity(url, transacaoRequest, PagarMeTransacaoResponse.class);
+        return criarPagamento(diaria, response.getBody());
+    }
+
+    private Pagamento criarPagamento(Diaria diaria, PagarMeTransacaoResponse body) {
+        var pagamento = Pagamento.builder()
+            .valor(diaria.getPreco())
+            .transacaoId(body.getId())
+            .diaria(diaria)
+            .status(criarPagamentoStatus(body.getStatus()))
+            .build();
+        return pagamentoRepository.save(pagamento);
+    }
+
+    private PagamentoStatus criarPagamentoStatus(String transacaoStatus) {
+        return transacaoStatus.equals("paid") ? PagamentoStatus.ACEITO : PagamentoStatus.REPROVADO;
+    }
+
+    private PagarMeTransacaoRequest criarTransacaoRequest(Diaria diaria, String cardHash) {
+        return PagarMeTransacaoRequest.builder()
+            .amount(converterReaisParaCentavos(diaria.getPreco()))
+            .cardHash(cardHash)
+            .async(false)
+            .apiKey(apiKey)
+            .build();
+    }
+
+    private Integer converterReaisParaCentavos(BigDecimal preco) {
+        return preco.multiply(new BigDecimal(100)).intValue();
     }
 
     private JsonNode getJsonNode(String responseBody) {
