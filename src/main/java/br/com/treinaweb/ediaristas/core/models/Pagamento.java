@@ -49,4 +49,8 @@ public class Pagamento extends Auditable {
     @JoinColumn(nullable = false)
     private Diaria diaria;
 
+    public boolean isAceito() {
+        return status.equals(PagamentoStatus.ACEITO);
+    }
+
 }
