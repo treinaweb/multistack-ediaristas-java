@@ -57,4 +57,18 @@ public interface DiariaRepository extends
         );
     }
 
+    default List<Diaria> getAptasParaCancelamento() {
+        return this.findAll(
+            where(
+                isPago()
+                .and(comMenos24HorasParaAtendimento())
+                .and(semCandidatos())
+            ).or(
+                isSemPagamento()
+                .and(comMais24HorasDesdeCriacao())
+                .and(semCandidatos())
+            )
+        );
+    }
+
 }

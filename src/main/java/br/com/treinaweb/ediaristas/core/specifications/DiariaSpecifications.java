@@ -37,6 +37,12 @@ public class DiariaSpecifications {
         };
     }
 
+    public static Specification<Diaria> isSemPagamento() {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get(Diaria_.status), DiariaStatus.SEM_PAGAMENTO);
+        };
+    }
+
     public static Specification<Diaria> semDiarista() {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.isNull(root.get(Diaria_.diarista));
@@ -48,6 +54,21 @@ public class DiariaSpecifications {
             return criteriaBuilder.lessThanOrEqualTo(
                 root.get(Diaria_.createdAt),
                 LocalDateTime.now().minusHours(24)
+            );
+        };
+    }
+
+    public static Specification<Diaria> semCandidatos() {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.isEmpty(root.get(Diaria_.candidatos));
+        };
+    }
+
+    public static Specification<Diaria> comMenos24HorasParaAtendimento() {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.lessThan(
+                root.get(Diaria_.dataAtendimento),
+                LocalDateTime.now().plusHours(24)
             );
         };
     }
