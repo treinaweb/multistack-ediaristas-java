@@ -7,4 +7,6 @@ public interface GatewayPagamentoService {
 
     Pagamento pagar(Diaria diaria, String cardHash);
 
+    Pagamento realizarEstornoTotal(Diaria diaria);
+
 }
