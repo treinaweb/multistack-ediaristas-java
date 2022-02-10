@@ -87,6 +87,11 @@ public class DiariaResponse extends HateoasResponse{
         return status.equals(DiariaStatus.CONCLUIDO.getId());
     }
 
+    @JsonIgnore
+    public boolean isPago() {
+        return status.equals(DiariaStatus.PAGO.getId());
+    }
+
 
 
 }
