@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import lombok.AllArgsConstructor;
@@ -120,6 +121,9 @@ public class Diaria extends Auditable {
         inverseJoinColumns = @JoinColumn(name = "candidato_id")
     )
     private List<Usuario> candidatos;
+
+    @OneToMany(mappedBy = "diaria")
+    private List<Pagamento> pagamentos;
 
     public Boolean isSemPagamento() {
         return status.equals(DiariaStatus.SEM_PAGAMENTO);

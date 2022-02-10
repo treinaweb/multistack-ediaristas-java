@@ -65,7 +65,7 @@ public class ApiCidadesAtendidasService {
     private CidadeAtendida cadastrarCidadeAtendida(String codigoIbge) {
         var cidade = consultaCidadeService.buscarCidadePorCodigoIbge(codigoIbge);
         var cidadeAtendida = new CidadeAtendida();
-        cidadeAtendida.setCidade(codigoIbge);
+        cidadeAtendida.setCodigoIbge(codigoIbge);
         cidadeAtendida.setCidade(cidade.getCidade());
         cidadeAtendida.setEstado(cidade.getEstado());
 
