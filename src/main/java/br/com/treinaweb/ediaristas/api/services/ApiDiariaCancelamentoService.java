@@ -9,6 +9,7 @@ import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
+import br.com.treinaweb.ediaristas.core.validators.DiariaCancelamentoValidator;
 
 @Service
 public class ApiDiariaCancelamentoService {
@@ -16,8 +17,12 @@ public class ApiDiariaCancelamentoService {
     @Autowired
     private DiariaRepository diariaRepository;
 
+    @Autowired
+    private DiariaCancelamentoValidator validator;
+
     public MensagemResponse cancelar(Long diariaId, DiariaCancelamentoRequest request) {
         var diaria = buscarDiariaPorId(diariaId);
+        validator.validar(diaria);
 
         diaria.setStatus(DiariaStatus.CANCELADO);
         diaria.setMotivoCancelamento(request.getMotivoCancelamento());
