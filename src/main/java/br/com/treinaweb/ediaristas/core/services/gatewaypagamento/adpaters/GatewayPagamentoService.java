@@ -9,4 +9,6 @@ public interface GatewayPagamentoService {
 
     Pagamento realizarEstornoTotal(Diaria diaria);
 
+    Pagamento realizarEstornoParcial(Diaria diaria);
+
 }

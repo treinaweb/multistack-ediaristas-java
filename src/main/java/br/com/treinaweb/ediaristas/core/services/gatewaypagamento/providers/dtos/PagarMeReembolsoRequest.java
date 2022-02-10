@@ -17,4 +17,6 @@ public class PagarMeReembolsoRequest {
 
     private String apiKey;
 
+    private Integer amount;
+
 }

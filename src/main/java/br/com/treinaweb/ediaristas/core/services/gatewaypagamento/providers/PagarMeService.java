@@ -64,17 +64,41 @@ public class PagarMeService implements GatewayPagamentoService {
         }
     }
 
+    @Override
+    public Pagamento realizarEstornoParcial(Diaria diaria) {
+        try {
+            return tryRealizarEstornoParcial(diaria);
+        } catch (HttpClientErrorException.BadRequest exception) {
+            throw new GatewayPagamentoException(exception.getLocalizedMessage());
+        }
+    }
+
+    private Pagamento tryRealizarEstornoParcial(Diaria diaria) {
+        var request = PagarMeReembolsoRequest.builder()
+            .amount(converterReaisParaCentavos(diaria.getPreco().divide(new BigDecimal(2))))
+            .apiKey(apiKey)
+            .build();
+        return realizarEstorno(diaria, request);
+    }
+
     private Pagamento tryRealizarEstornoTotal(Diaria diaria) {
+        var request = PagarMeReembolsoRequest.builder()
+            .apiKey(apiKey)
+            .build();
+        return realizarEstorno(diaria, request);
+    }
+
+    private Pagamento realizarEstorno(Diaria diaria, PagarMeReembolsoRequest request) {
         validarDiariaParaReembolso(diaria);
         var pagamento = getPagamentoDaDiaria(diaria);
         var url = BASE_URL + "/transactions/{transaction_id}/refund";
-        var request = PagarMeReembolsoRequest.builder().apiKey(apiKey).build();
         var response = clienteHttp.postForEntity(url, request, PagarMeReembolsoResponse.class, pagamento.getTransacaoId());
         return criarPagamento(diaria, response.getBody());
     }
 
     private void validarDiariaParaReembolso(Diaria diaria) {
-        if (!diaria.isPago()) {
+        var isNotPagaOrNotConfirmada = !(diaria.isPago() || diaria.isConfirmado());
+        if (isNotPagaOrNotConfirmada) {
             throw new IllegalArgumentException("Não pode ser feito reembolso de diária que não estão pagas");
         }
     }
