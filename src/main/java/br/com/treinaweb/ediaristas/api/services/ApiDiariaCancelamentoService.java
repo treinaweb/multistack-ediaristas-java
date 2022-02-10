@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.treinaweb.ediaristas.api.dtos.requests.DiariaCancelamentoRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
@@ -36,19 +37,20 @@ public class ApiDiariaCancelamentoService {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
+    @Transactional(readOnly = false)
     public MensagemResponse cancelar(Long diariaId, DiariaCancelamentoRequest request) {
         var diaria = buscarDiariaPorId(diariaId);
         validator.validar(diaria);
-
-        diaria.setStatus(DiariaStatus.CANCELADO);
-        diaria.setMotivoCancelamento(request.getMotivoCancelamento());
-        diariaRepository.save(diaria);
 
         if (hasPenalizacao(diaria)) {
             aplicarPenalizacao(diaria);
         } else {
             gatewayPagamentoService.realizarEstornoTotal(diaria);
         }
+
+        diaria.setStatus(DiariaStatus.CANCELADO);
+        diaria.setMotivoCancelamento(request.getMotivoCancelamento());
+        diariaRepository.save(diaria);
 
         return new MensagemResponse("A diária foi cancelado com sucesso!");
     }
@@ -58,6 +60,8 @@ public class ApiDiariaCancelamentoService {
         if (usuarioLogado.isDiarista()) {
             penalizarDiarista(diaria);
             gatewayPagamentoService.realizarEstornoTotal(diaria);
+        } else {
+            gatewayPagamentoService.realizarEstornoParcial(diaria);
         }
     }
 
