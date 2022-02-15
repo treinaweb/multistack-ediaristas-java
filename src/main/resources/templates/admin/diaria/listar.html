@@ -22,10 +22,12 @@
                   <th>Status</th>
                   <th>Nome Cliente</th>
                   <th>Nome Diarista</th>
+                  <th>Chave Pix</th>
                   <th>Data Atendimento</th>
                   <th>Preço</th>
                   <th>Comissão</th>
                   <th>Transferencia</th>
+                  <th>Ação</th>
                 </tr>
               </thead>
               <tbody>
@@ -34,10 +36,26 @@
                   <td th:text="${diaria.status}"></td>
                   <td th:text="${diaria.cliente.nomeCompleto}"></td>
                   <td th:text="${diaria.diarista != null ? diaria.diarista.nomeCompleto : ''}"></td>
+                  <td th:text="${diaria.diarista != null ? diaria.diarista.chavePix : ''}"></td>
                   <td th:text="${#temporals.format(diaria.dataAtendimento, 'dd/MM/yyyy hh:mm')}"></td>
                   <td th:text="${#numbers.formatCurrency(diaria.preco)}"></td>
                   <td th:text="${#numbers.formatCurrency(diaria.valorComissao)}"></td>
                   <td th:text="${#numbers.formatCurrency(diaria.preco - diaria.valorComissao)}"></td>
+                  <td>
+                    <a
+                      th:if="${#arrays.contains({'CONCLUIDO', 'AVALIDO'}, diaria.status.name)}"
+                      th:href="@{/admin/diarias/{id}/pagar (id=${diaria.id})}"
+                      class="btn btn-primary"
+                    >
+                      Marcar como transferido
+                    </a>
+                    <a
+                      th:unless="${#arrays.contains({'CONCLUIDO', 'AVALIDO'}, diaria.status.name)}"
+                      class="btn btn-danger disabled"
+                    >
+                      Indisponível
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>
