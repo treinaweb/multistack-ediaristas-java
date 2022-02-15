@@ -13,14 +13,35 @@
             <div class="card-tools">
               <form method="GET" class="form-inline">
                 <label for="cliente" class="sr-only">Nome do cliente</label>
-                <input type="text" name="cliente" class="form-control mb-2 mr-sm-2" placeholder="Buscar por cliente" >
+                <input
+                  type="text"
+                  name="cliente"
+                  class="form-control mb-2 mr-sm-2"
+                  placeholder="Buscar por cliente"
+                  th:value="${param.cliente != null ? param.cliente : ''}"
+                >
 
                 <label for="status" class="sr-only">Status</label>
                 <select name="status" class="form-control mb-2 mr-sm-2">
                   <option value="">Todas</option>
-                  <option value="SEM_PAGAMENTO,PAGO,CONFIRMADO">Pendentes</option>
-                  <option value="CANCELADO">Canceladas</option>
-                  <option value="CONCLUIDO,AVALIADO,TRANSFERIDO">Concluídas</option>
+                  <option
+                    value="SEM_PAGAMENTO,PAGO,CONFIRMADO"
+                    th:selected="${#strings.equals(param.status, 'SEM_PAGAMENTO,PAGO,CONFIRMADO') ? 'true' : 'false'}"
+                  >
+                    Pendentes
+                  </option>
+                  <option
+                    value="CANCELADO"
+                    th:selected="${#strings.equals(param.status, 'CANCELADO') ? 'true' : 'false'}"
+                  >
+                    Canceladas
+                  </option>
+                  <option
+                    value="CONCLUIDO,AVALIADO,TRANSFERIDO"
+                    th:selected="${#strings.equals(param.status, 'CONCLUIDO,AVALIADO,TRANSFERIDO') ? 'true' : 'false'}"
+                  >
+                    Concluídas
+                  </option>
                 </select>
 
                 <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
