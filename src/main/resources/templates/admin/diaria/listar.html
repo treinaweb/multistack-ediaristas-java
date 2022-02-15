@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html th:replace="~{adminlte3 :: layout (~{::title}, ~{::main}, _, _)}">
+<head>
+  <title>Lista de Diárias</title>
+</head>
+<body>
+  <main>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Lista de Diárias</div>
+            <!-- <div class="card-tools">
+              <a th:href="@{/admin/servicos/cadastrar}" class="btn btn-sm btn-success">Novo Serviço</a>
+            </div> -->
+          </div>
+          <div class="card-body">
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Status</th>
+                  <th>Nome Cliente</th>
+                  <th>Nome Diarista</th>
+                  <th>Data Atendimento</th>
+                  <th>Preço</th>
+                  <th>Comissão</th>
+                  <th>Transferencia</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="diaria : ${diarias}">
+                  <td th:text="${diaria.id}"></td>
+                  <td th:text="${diaria.status}"></td>
+                  <td th:text="${diaria.cliente.nomeCompleto}"></td>
+                  <td th:text="${diaria.diarista != null ? diaria.diarista.nomeCompleto : ''}"></td>
+                  <td th:text="${#temporals.format(diaria.dataAtendimento, 'dd/MM/yyyy hh:mm')}"></td>
+                  <td th:text="${#numbers.formatCurrency(diaria.preco)}"></td>
+                  <td th:text="${#numbers.formatCurrency(diaria.valorComissao)}"></td>
+                  <td th:text="${#numbers.formatCurrency(diaria.preco - diaria.valorComissao)}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
