@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.treinaweb.ediaristas.api.controllers.AvaliacaoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.ConfirmacaoPresencaRestController;
+import br.com.treinaweb.ediaristas.api.controllers.DiariaCancelamentoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaPagamentoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiariaResponse;
@@ -52,6 +53,13 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
             resource.adcionarLinks(avaliacaoLink);
         }
 
+        if (isAptaParaCancelamento(resource)) {
+            var cancelarDiariaLink = linkTo(methodOn(DiariaCancelamentoRestController.class).cancelar(id, null))
+                .withRel("cancelar_diaria")
+                .withType("PATCH");
+            resource.adcionarLinks(cancelarDiariaLink);
+        }
+
         var selfLink = linkTo(methodOn(DiariaRestController.class).buscarPorId(id))
             .withSelfRel()
             .withType("GET");
@@ -78,6 +86,11 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
     private boolean isAptaParaAvaliacao(DiariaResponse resource) {
         return resource.isConcluido()
             && !avaliacaoRepository.existsByAvaliadorAndDiariaId(securityUtils.getUsuarioLogado(), resource.getId());
+    }
+
+    private boolean isAptaParaCancelamento(DiariaResponse resource) {
+        return (resource.isPago() || resource.isConfirmado())
+            && resource.getDataAtendimento().isAfter(LocalDateTime.now());
     }
 
 }
