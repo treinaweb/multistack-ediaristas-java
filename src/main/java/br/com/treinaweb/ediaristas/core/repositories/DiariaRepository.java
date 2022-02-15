@@ -5,10 +5,12 @@ import static org.springframework.data.jpa.domain.Specification.where;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 
@@ -20,6 +22,15 @@ public interface DiariaRepository extends
     List<Diaria> findByCliente(Usuario cliente);
 
     List<Diaria> findByDiarista(Usuario diarista);
+
+    default List<Diaria> findComFiltro(String cliente, List<DiariaStatus> status, Sort sort) {
+        return this.findAll(
+            where(
+                clienteNomeCompletoContem(cliente)
+                .and(statusIn(status))
+            ), sort
+        );
+    }
 
     @Query(
         """

@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.web.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
@@ -20,8 +21,10 @@ public class WebDiariaService {
     @Autowired
     private TransferenciaValidator validator;
 
-    public List<Diaria> buscarDarias() {
-        return diariaRepository.findAll();
+    public List<Diaria> buscarDarias(String cliente, List<DiariaStatus> status) {
+        var diariaSort = Sort.sort(Diaria.class);
+        var sort = diariaSort.by(Diaria::getDataAtendimento).descending();
+        return diariaRepository.findComFiltro(cliente, status, sort);
     }
 
     public void pagar(Long id) {
