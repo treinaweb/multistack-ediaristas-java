@@ -7,14 +7,16 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DiariaStatus {
 
-    SEM_PAGAMENTO(1),
-    PAGO(2),
-    CONFIRMADO(3),
-    CONCLUIDO(4),
-    CANCELADO(5),
-    AVALIADO(6),
-    TRANSFERIDO(7);
+    SEM_PAGAMENTO(1, "Aguardando Pagamento"),
+    PAGO(2, "Paga"),
+    CONFIRMADO(3, "Diarista Selecionado"),
+    CONCLUIDO(4, "Presença Confirmada"),
+    CANCELADO(5, "Cancelada"),
+    AVALIADO(6, "Avaliada"),
+    TRANSFERIDO(7, "Transferido para Diarista");
 
     private Integer id;
+
+    private String descricao;
 
 }
