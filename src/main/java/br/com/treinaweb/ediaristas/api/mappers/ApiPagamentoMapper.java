@@ -16,7 +16,7 @@ public interface ApiPagamentoMapper {
     ApiPagamentoMapper INSTANCE = Mappers.getMapper(ApiPagamentoMapper.class);
 
     @Mapping(target = "status", source = "diaria.status")
-    @Mapping(target = "valor", source = "diaria.valor")
+    @Mapping(target = "valor", source = "diaria.preco")
     @Mapping(target = "valorDeposito", source = "model")
     PagamentoResponse toResponse(Pagamento model);
 
