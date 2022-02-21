@@ -1,11 +1,14 @@
 package br.com.treinaweb.ediaristas.api.services;
 
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.treinaweb.ediaristas.api.dtos.requests.AtualizarUsuarioRequest;
 import br.com.treinaweb.ediaristas.api.dtos.requests.UsuarioRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.TokenResponse;
@@ -13,6 +16,7 @@ import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioCadastroResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiUsuarioMapper;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
+import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.publishers.NovoUsuarioPublisher;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
 import br.com.treinaweb.ediaristas.core.services.storage.adapters.StorageService;
@@ -80,6 +84,39 @@ public class ApiUsuarioService {
         usuarioLogado.setFotoUsuario(foto);
         repository.save(usuarioLogado);
         return new MensagemResponse("Foto salva com sucesso!");
+    }
+
+    public MensagemResponse atualizar(AtualizarUsuarioRequest request) {
+        var usuarioLogado = securityUtils.getUsuarioLogado();
+
+        atualizarInformacoesUsuarioLogado(request, usuarioLogado);
+
+        validator.validar(usuarioLogado);
+
+        repository.save(usuarioLogado);
+
+        return new MensagemResponse("Usuário atualizado com sucesso");
+    }
+
+    private void atualizarInformacoesUsuarioLogado(AtualizarUsuarioRequest request, Usuario usuarioLogado) {
+        usuarioLogado.setNomeCompleto(
+            firstNonNull(request.getNomeCompleto(), usuarioLogado.getNomeCompleto())
+        );
+        usuarioLogado.setEmail(
+            firstNonNull(request.getEmail(), usuarioLogado.getEmail())
+        );
+        usuarioLogado.setCpf(
+            firstNonNull(request.getCpf(), usuarioLogado.getCpf())
+        );
+        usuarioLogado.setNascimento(
+            firstNonNull(request.getNascimento(), usuarioLogado.getNascimento())
+        );
+        usuarioLogado.setTelefone(
+            firstNonNull(request.getTelefone(), usuarioLogado.getTelefone())
+        );
+        usuarioLogado.setChavePix(
+            firstNonNull(request.getChavePix(), usuarioLogado.getChavePix())
+        );
     }
 
     private TokenResponse gerarTokenResponse(UsuarioCadastroResponse response) {
