@@ -57,7 +57,11 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
             .withRel("alterar_foto_usuario")
             .withType("POST");
 
-        resource.adcionarLinks(listaDiariasLink, alterarFotoUsuarioLink);
+        var editarUsuarioLink = linkTo(methodOn(UsuarioRestController.class).atualizar(null))
+            .withRel("editar_usuario")
+            .withType("PUT");
+
+        resource.adcionarLinks(listaDiariasLink, alterarFotoUsuarioLink, editarUsuarioLink);
     }
 
     @Override
