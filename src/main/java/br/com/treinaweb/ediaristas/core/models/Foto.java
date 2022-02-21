@@ -2,10 +2,12 @@ package br.com.treinaweb.ediaristas.core.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.com.treinaweb.ediaristas.core.listeners.FotoEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@EntityListeners(FotoEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

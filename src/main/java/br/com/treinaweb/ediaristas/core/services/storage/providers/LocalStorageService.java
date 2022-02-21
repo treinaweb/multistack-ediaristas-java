@@ -39,6 +39,17 @@ public class LocalStorageService implements StorageService {
         }
     }
 
+    @Override
+    public void apagar(String filename) throws StorageServiceException {
+        var arquivo = pastaUpload.resolve(filename);
+
+        try {
+            Files.deleteIfExists(arquivo);
+        } catch (IOException exception) {
+            throw new StorageServiceException(exception.getLocalizedMessage());
+        }
+    }
+
     public Resource buscarFoto(String filename) {
         var arquivo = pastaUpload.resolve(filename);
 
