@@ -15,6 +15,7 @@ import br.com.treinaweb.ediaristas.api.dtos.responses.TokenResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioCadastroResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiUsuarioMapper;
+import br.com.treinaweb.ediaristas.core.exceptions.SenhaIncorretaException;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.publishers.NovoUsuarioPublisher;
@@ -93,9 +94,36 @@ public class ApiUsuarioService {
 
         validator.validar(usuarioLogado);
 
+        alterarSenha(request, usuarioLogado);
+
         repository.save(usuarioLogado);
 
         return new MensagemResponse("Usuário atualizado com sucesso");
+    }
+
+    private void alterarSenha(AtualizarUsuarioRequest request, Usuario usuarioLogado) {
+        var hasSenhas = request.getPassword() != null
+            && request.getNewPassword() != null
+            && request.getPasswordConfirmation() != null;
+
+        if (hasSenhas) {
+            verificarSenha(request, usuarioLogado);
+            validarConfirmacaoSenha(request);
+            var novaSenha = request.getNewPassword();
+            var novaSenhaHash = passwordEncoder.encode(novaSenha);
+            usuarioLogado.setSenha(novaSenhaHash);
+        }
+    }
+
+    private void verificarSenha(AtualizarUsuarioRequest request, Usuario usuarioLogado) {
+        var senhaRequest = request.getPassword();
+        var senhaDB = usuarioLogado.getSenha();
+
+        if (!passwordEncoder.matches(senhaRequest, senhaDB)) {
+            var mensagem = "A senha informada está incorreta";
+            var fieldError = new FieldError(request.getClass().getName(), "password", senhaRequest, false, null, null, mensagem);
+            throw new SenhaIncorretaException(mensagem, fieldError);
+        }
     }
 
     private void atualizarInformacoesUsuarioLogado(AtualizarUsuarioRequest request, Usuario usuarioLogado) {
@@ -136,6 +164,18 @@ public class ApiUsuarioService {
 
     private void validarConfirmacaoSenha(UsuarioRequest request) {
         var senha = request.getPassword();
+        var confirmacaoSenha = request.getPasswordConfirmation();
+
+        if (!senha.equals(confirmacaoSenha)) {
+            var mensagem = "Os dois campos de senha não conferem";
+            var fieldError = new FieldError(request.getClass().getName(), "passwordConfirmation", request.getPasswordConfirmation(), false, null, null, mensagem);
+
+            throw new SenhasNaoConferemException(mensagem, fieldError);
+        }
+    }
+
+    private void validarConfirmacaoSenha(AtualizarUsuarioRequest request) {
+        var senha = request.getNewPassword();
         var confirmacaoSenha = request.getPasswordConfirmation();
 
         if (!senha.equals(confirmacaoSenha)) {

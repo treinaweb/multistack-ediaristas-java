@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.treinaweb.ediaristas.api.assemblers.UsuarioAssembler;
+import br.com.treinaweb.ediaristas.api.dtos.requests.AtualizarUsuarioRequest;
 import br.com.treinaweb.ediaristas.api.dtos.requests.UsuarioRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
@@ -37,6 +40,12 @@ public class UsuarioRestController {
         assembler.adicionarLinks(response);
 
         return response;
+    }
+
+    @PutMapping
+    @EDiaristasPermissions.isDiaristaOrCliente
+    public MensagemResponse atualizar(@RequestBody @Valid AtualizarUsuarioRequest request) {
+        return service.atualizar(request);
     }
 
     @PostMapping("/foto")
