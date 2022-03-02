@@ -11,6 +11,7 @@ import br.com.treinaweb.ediaristas.api.controllers.CidadesAtendidasRestControlle
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.OportunidadeRestController;
+import br.com.treinaweb.ediaristas.api.controllers.PagamentoRestController;
 import br.com.treinaweb.ediaristas.api.controllers.UsuarioRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
