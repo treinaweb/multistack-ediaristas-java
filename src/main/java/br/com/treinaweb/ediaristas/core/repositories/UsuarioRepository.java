@@ -63,4 +63,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             .orElse(false);
     }
 
+    boolean existsByEmail(String email);
+
 }
