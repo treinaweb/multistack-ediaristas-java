@@ -111,6 +111,7 @@ public class SecurityConfig {
             )
             .authorizeRequests(authorizeRequestsCustomizer ->
                 authorizeRequestsCustomizer
+                    .antMatchers("/admin/resetar-senha/**").permitAll()
                     .anyRequest()
                     .hasAnyAuthority(TipoUsuario.ADMIN.name())
             )
