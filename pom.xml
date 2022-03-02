@@ -18,6 +18,7 @@
 		<jjwt.version>0.9.1</jjwt.version>
 		<google-maps-services.version>1.0.0</google-maps-services.version>
 		<hibernate-jpamodelgen.version>5.6.1.Final</hibernate-jpamodelgen.version>
+		<aws-java-sdk-version>1.12.141</aws-java-sdk-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,6 +44,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -123,6 +125,18 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
 			<version>${hibernate-jpamodelgen.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>${aws-java-sdk-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 

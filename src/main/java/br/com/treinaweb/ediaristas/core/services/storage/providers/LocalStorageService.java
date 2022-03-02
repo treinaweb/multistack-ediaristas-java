@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import br.com.treinaweb.ediaristas.core.services.storage.adapters.StorageService
 import br.com.treinaweb.ediaristas.core.services.storage.exceptions.StorageServiceException;
 
 @Service
+@Profile("dev")
 public class LocalStorageService implements StorageService {
 
     private final Path pastaUpload = Paths.get("uploads");

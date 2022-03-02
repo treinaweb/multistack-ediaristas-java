@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.api.controllers;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import br.com.treinaweb.ediaristas.core.services.storage.providers.LocalStorageS
 
 @RestController
 @RequestMapping("/uploads")
+@Profile("dev")
 public class StorageRestController {
 
     @Autowired
