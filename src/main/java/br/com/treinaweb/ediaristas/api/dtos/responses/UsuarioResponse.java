@@ -27,6 +27,7 @@ public class UsuarioResponse extends HateoasResponse {
     private LocalDate nascimento;
     private String telefone;
     private String chavePix;
+    private String fotoUsuario;
 
     @JsonIgnore
     public Boolean isCliente() {

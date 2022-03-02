@@ -22,9 +22,11 @@ public interface ApiUsuarioMapper {
     Usuario toModel(UsuarioRequest request);
 
     @Mapping(target = "tipoUsuario", source = "tipoUsuario.id")
+    @Mapping(target = "fotoUsuario", source = "fotoUsuario.url")
     UsuarioResponse toResponse(Usuario model);
 
     @Mapping(target = "tipoUsuario", source = "tipoUsuario.id")
+    @Mapping(target = "fotoUsuario", source = "fotoUsuario.url")
     UsuarioCadastroResponse toCadastroResponse(Usuario model);
 
     default TipoUsuario integerToTipoUsuario(Integer valor) {

@@ -9,4 +9,6 @@ public interface StorageService {
 
     Foto salvar(MultipartFile file) throws StorageServiceException;
 
+    void apagar(String filename) throws StorageServiceException;
+
 }
