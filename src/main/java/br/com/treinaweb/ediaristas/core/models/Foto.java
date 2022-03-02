@@ -9,12 +9,14 @@ import javax.persistence.Id;
 
 import br.com.treinaweb.ediaristas.core.listeners.FotoEntityListener;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Builder
 @EntityListeners(FotoEntityListener.class)
 @Data
 @NoArgsConstructor
