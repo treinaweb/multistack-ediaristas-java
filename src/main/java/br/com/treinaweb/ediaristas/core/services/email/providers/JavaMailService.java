@@ -2,7 +2,7 @@ package br.com.treinaweb.ediaristas.core.services.email.providers;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

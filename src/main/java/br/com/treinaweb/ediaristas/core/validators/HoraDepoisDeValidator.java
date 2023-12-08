@@ -2,8 +2,8 @@ package br.com.treinaweb.ediaristas.core.validators;
 
 import java.time.LocalDateTime;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class HoraDepoisDeValidator implements ConstraintValidator<HoraDepoisDe, LocalDateTime> {
 
