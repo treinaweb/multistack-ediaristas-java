@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,18 +93,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException exception,
-        HttpHeaders headers,
-        HttpStatus status,
-        WebRequest request
-    ) {
-        return handleBindException(exception, headers, status, request);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleBindException(
-        BindException exception,
-        HttpHeaders headers,
-        HttpStatus status,
+        HttpHeaders headers, 
+        HttpStatusCode status, 
         WebRequest request
     ) {
         var body = new HashMap<String, List<String>>();
