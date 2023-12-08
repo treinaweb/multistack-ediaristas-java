@@ -15,7 +15,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<mapstruct.version>1.3.1.Final</mapstruct.version>
-		<jjwt.version>0.9.1</jjwt.version>
+		<jjwt.version>0.11.5</jjwt.version>
 		<google-maps-services.version>1.0.0</google-maps-services.version>
 		<hibernate-jpamodelgen.version>6.3.1.Final</hibernate-jpamodelgen.version>
 		<aws-java-sdk-version>1.12.141</aws-java-sdk-version>
@@ -117,7 +117,17 @@
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
 			<version>${jjwt.version}</version>
 		</dependency>
 
