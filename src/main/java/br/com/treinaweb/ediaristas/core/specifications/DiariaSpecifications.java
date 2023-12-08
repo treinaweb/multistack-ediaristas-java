@@ -3,7 +3,7 @@ package br.com.treinaweb.ediaristas.core.specifications;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.JoinType;
 
 import org.springframework.data.jpa.domain.Specification;
 

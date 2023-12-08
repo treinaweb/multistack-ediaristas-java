@@ -1,6 +1,6 @@
 package br.com.treinaweb.ediaristas.core.exceptions;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 public class UsuarioNaoEncontradoException extends EntityNotFoundException {
 

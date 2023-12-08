@@ -12,7 +12,7 @@ import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceEx
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JjwtService implements TokenService {
@@ -64,7 +64,7 @@ public class JjwtService implements TokenService {
             .setSubject(subject)
             .setIssuedAt(new Date(dataHoraAtual.toEpochMilli()))
             .setExpiration(new Date(dataHoraExpiracao.toEpochMilli()))
-            .signWith(SignatureAlgorithm.HS512, signKey)
+            .signWith(Keys.hmacShaKeyFor(signKey.getBytes()))
             .compact();
     }
 
@@ -77,8 +77,9 @@ public class JjwtService implements TokenService {
     }
 
     private Claims tryGetClaims(String token, String signKey) {
-        return Jwts.parser()
-            .setSigningKey(signKey)
+        return Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(signKey.getBytes()))
+            .build()
             .parseClaimsJws(token)
             .getBody();
     }

@@ -1,6 +1,6 @@
 package br.com.treinaweb.ediaristas.core.listeners;
 
-import javax.persistence.PreRemove;
+import jakarta.persistence.PreRemove;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
